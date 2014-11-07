@@ -1,0 +1,17 @@
+Feature: Run sqlmap against a target
+
+Scenario: Identify SQL injection vulnerabilities
+  Given "sqlmap" is installed
+  And the following profile:
+    | name       | value                        |
+    | target_url | http://myurl.de/resource?full=true  |
+    | headers    | "Some-Header: With some value!" |
+    | dbms       | Oracle |
+  When I launch a "sqlmap" attack with:
+    """
+    python <sqlmap_path> -u <target_url> -v 1 --headers=<headers> --dbms=<dbms>
+    """
+  Then the output should contain:
+    """
+    all tested parameters appear to be not injectable
+    """

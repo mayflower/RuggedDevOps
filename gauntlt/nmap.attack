@@ -1,0 +1,18 @@
+Feature: simple nmap attack to check for open ports
+
+  Background:
+    Given "nmap" is installed
+    And the following profile:
+      | name     | value        |
+      | hostname | myurl.de     |
+
+  Scenario: Check standard web ports
+    When I launch an "nmap" attack with:
+      """
+      nmap -F <hostname>
+      """
+    Then the output should match /80.tcp\s+open/
+    Then the output should not match:
+      """
+      (25|443)\/tcp\s+open
+      """
